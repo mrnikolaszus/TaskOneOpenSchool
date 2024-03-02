@@ -5,31 +5,34 @@
 -- Создание таблицы Category
 CREATE TABLE IF NOT EXISTS category (
                           id BIGSERIAL PRIMARY KEY ,
+                          name VARCHAR(64) NOT NULL UNIQUE,
                           time_created TIMESTAMP,
-                          time_updated TIMESTAMP,
-                          name VARCHAR(64) NOT NULL UNIQUE
+                          time_updated TIMESTAMP
+
 );
 
 -- Создание таблицы Product
 CREATE TABLE IF NOT EXISTS product (
                          id BIGSERIAL PRIMARY KEY,
-                         time_created TIMESTAMP,
-                         time_updated TIMESTAMP,
                          name VARCHAR(64) NOT NULL UNIQUE,
-                         description TEXT,
+                         description VARCHAR(255),
                          price double precision,
                          category_id INTEGER,
+                         time_created TIMESTAMP,
+                         time_updated TIMESTAMP,
                          FOREIGN KEY (category_id) REFERENCES category(id)
 );
 
 -- Создание таблицы Review
 CREATE TABLE IF NOT EXISTS review (
                         id BIGSERIAL PRIMARY KEY,
-                        time_created TIMESTAMP,
-                        time_updated TIMESTAMP,
                         text VARCHAR(255),
                         rate INTEGER,
                         product_id BIGINT,
+                        time_created TIMESTAMP,
+                        time_updated TIMESTAMP,
                         FOREIGN KEY (product_id) REFERENCES product(id)
 );
+
+
 

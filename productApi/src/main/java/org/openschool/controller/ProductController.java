@@ -61,7 +61,7 @@ public class ProductController {
     }
 
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseStatus(HttpStatus.OK)
     public void deleteProduct(@PathVariable Long id) {
         ProductInfoDTO productInfoDTO = productService.getProductById(id);
         if (productInfoDTO == null)
