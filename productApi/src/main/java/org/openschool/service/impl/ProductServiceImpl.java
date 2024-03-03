@@ -2,6 +2,7 @@ package org.openschool.service.impl;
 
 import org.openschool.dto.ProductInfoDTO;
 import org.openschool.entity.Product;
+import org.openschool.exception.ProductExistException;
 import org.openschool.exception.ProductNotFoundException;
 import org.openschool.mapper.ProductMapper;
 import org.openschool.repository.ProductRepository;
@@ -28,6 +29,9 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public ProductInfoDTO createProduct(ProductInfoDTO productInfoDTO) {
+        if(productRepository.existsByName(productInfoDTO.getName())) {
+            throw new ProductExistException("A product with the name " + productInfoDTO.getName() + " already exists.");
+        }
         Product product = productMapper.toEntity(productInfoDTO);
         product = productRepository.save(product);
         return productMapper.toDTO(product);
@@ -51,14 +55,17 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public ProductInfoDTO updateProduct(Long id, ProductInfoDTO productInfoDTO) {
-        Product product = productRepository.findById(id)
+        if(productRepository.existsByNameAndIdNot(productInfoDTO.getName(), id)) {
+            throw new ProductExistException("A product with the name " + productInfoDTO.getName() + " already exists.");
+        }
+        Product existingProduct = productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException("Product with ID " + id + " not found"));
-        product.setName(productInfoDTO.getName());
-        product.setDescription(productInfoDTO.getDescription());
-        product.setPrice(productInfoDTO.getPrice());
-        product.setCategoryId(productInfoDTO.getCategoryId());
-        product = productRepository.save(product);
-        return productMapper.toDTO(product);
+        existingProduct.setName(productInfoDTO.getName());
+        existingProduct.setDescription(productInfoDTO.getDescription());
+        existingProduct.setPrice(productInfoDTO.getPrice());
+        existingProduct.setCategoryId(productInfoDTO.getCategoryId());
+        existingProduct = productRepository.save(existingProduct);
+        return productMapper.toDTO(existingProduct);
     }
 
     @Override
