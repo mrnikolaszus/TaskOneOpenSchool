@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
   <meta charset="UTF-8">
   <title>Create Product</title>
+  <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 
@@ -14,7 +16,13 @@
   <p>Name: <input type="text" th:field="*{name}" /></p>
   <p>Description: <input type="text" th:field="*{description}" /></p>
   <p>Price: <input type="number" th:field="*{price}" step="0.01" /></p>
-  <p>Category ID: <input type="number" th:field="*{categoryId}" /></p>
+  <p>Category: <select th:field="*{category}">
+    <option value="">Choose...</option>
+    <option th:each="category : ${categories}"
+            th:value="${category.name}"
+            th:text="${category.name}"
+            ></option>
+  </select></p>
   <p><input type="submit" value="Submit" /></p>
 </form>
 </body>

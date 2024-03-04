@@ -1,14 +1,42 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <title>Products</title>
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 <h1>Products</h1>
 
 <div th:if="${errorMessage}">
     <p th:text="${errorMessage}" style="color: red;"></p>
+</div>
+
+<div>
+    <form action="/products" method="get">
+        <div>
+            <label for="page">Page:</label>
+            <input type="number" id="page" name="page" min="0" th:value="${param.page != null ? param.page : 0}">
+        </div>
+        <div>
+            <label for="size">Size:</label>
+            <input type="number" id="size" name="size" min="1" th:value="${param.size != null ? param.size : 10}">
+        </div>
+        <div>
+            <label for="categorySelect">Category:</label>
+            <select id="categorySelect" name="category">
+                <option value="">All Categories</option>
+                <option th:each="cat : ${categories}"
+                        th:value="${cat.name}"
+                        th:text="${cat.name}"
+                        th:selected="${cat.name == category}"></option>
+            </select>
+        </div>
+        <div>
+            <button type="submit">Go</button>
+        </div>
+    </form>
 </div>
 
 <table>
@@ -18,7 +46,8 @@
         <th>Name</th>
         <th>Description</th>
         <th>Price</th>
-        <th>Category ID</th>
+        <th>Category</th>
+        <th>AvgRating</th>
         <th>Action</th>
     </tr>
     </thead>
@@ -28,7 +57,8 @@
         <td th:text="${product.name}">Name</td>
         <td th:text="${product.description}">Description</td>
         <td th:text="${product.price}">Price</td>
-        <td th:text="${product.categoryId}">Category ID</td>
+        <td th:text="${product.category}">Category</td>
+        <td th:text="${product.avgRating}">Category</td>
         <td>
             <a th:href="@{'/products/' + ${product.id}}">Edit</a>
             <a th:href="@{'/products/delete/' + ${product.id}}">Delete</a>

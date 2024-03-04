@@ -1,6 +1,10 @@
 package org.openschool.config.controllers;
 
+import org.openschool.config.entity.CategoryInfoDTO;
+import org.openschool.config.entity.PaginatedResponse;
 import org.openschool.config.entity.ProductInfoDTO;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,6 +14,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/products")
@@ -22,9 +31,31 @@ public class ProductViewController {
     }
 
     @GetMapping
-    public String getAllProducts(Model model) {
-        ResponseEntity<ProductInfoDTO[]> response = restTemplate.getForEntity(baseUrl, ProductInfoDTO[].class);
-        model.addAttribute("products", response.getBody());
+    public String getAllProducts(Model model,
+                                 @RequestParam(defaultValue = "0") int page,
+                                 @RequestParam(defaultValue = "10") int size,
+                                 @RequestParam(value = "category", required = false) String category) {
+
+        String url = baseUrl + "?page=" + page + "&size=" + size;
+        if (category != null && !category.isEmpty()) {
+            url += "&category=" + category;
+        }
+        ResponseEntity<PaginatedResponse<ProductInfoDTO>> response = restTemplate.exchange(
+                url,
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<PaginatedResponse<ProductInfoDTO>>() {});
+        PaginatedResponse<ProductInfoDTO> body = response.getBody();
+
+        if (body != null) {
+            model.addAttribute("category", category);
+            model.addAttribute("products", body.getContent());
+            model.addAttribute("currentPage", page);
+            model.addAttribute("totalPages", body.getTotalPages());
+            model.addAttribute("categories", getAllCategories());
+        } else {
+            model.addAttribute("products", Collections.emptyList());
+        }
         return "products";
     }
 
@@ -32,6 +63,7 @@ public class ProductViewController {
     public String getProductById(@PathVariable Long id, Model model) {
         ProductInfoDTO product = restTemplate.getForObject(baseUrl + "/" + id, ProductInfoDTO.class);
         model.addAttribute("product", product);
+        model.addAttribute("categories", getAllCategories());
         return "product";
     }
 
@@ -39,7 +71,13 @@ public class ProductViewController {
     public String updateProduct(@PathVariable Long id, @ModelAttribute  @Validated ProductInfoDTO productInfoDTO,
                                 BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
-            redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors());
+
+            String errorMessages = bindingResult.getFieldErrors().stream()
+                    .map(fieldError -> fieldError.getField() + ": " + fieldError.getDefaultMessage())
+                    .collect(Collectors.joining(", "));
+
+
+            redirectAttributes.addFlashAttribute("errorMessage", errorMessages);
             redirectAttributes.addFlashAttribute("product", productInfoDTO);
             return "redirect:/products/" + id;
         }
@@ -58,6 +96,7 @@ public class ProductViewController {
     @GetMapping("/create")
     public String showCreateProductForm(Model model) {
         model.addAttribute("product", ProductInfoDTO.builder().build());
+        model.addAttribute("categories", getAllCategories());
         return "productreg";
     }
 
@@ -66,8 +105,13 @@ public class ProductViewController {
                                 BindingResult bindingResult,
                                 RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
+
+            String errorMessages = bindingResult.getFieldErrors().stream()
+                    .map(fieldError -> fieldError.getField() + ": " + fieldError.getDefaultMessage())
+                    .collect(Collectors.joining(", "));
+
+            redirectAttributes.addFlashAttribute("errorMessage", errorMessages);
             redirectAttributes.addFlashAttribute("product", product);
-            redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors());
             return "redirect:/products/create";
         }
 
@@ -75,7 +119,7 @@ public class ProductViewController {
             restTemplate.postForEntity(baseUrl, product, ProductInfoDTO.class);
         } catch (HttpClientErrorException.Conflict e) {
             String errorMessage = e.getResponseBodyAsString();
-            redirectAttributes.addFlashAttribute("error", errorMessage);
+            redirectAttributes.addFlashAttribute("errorMessage", errorMessage);
             return "redirect:/products/create";
         }
 
@@ -90,6 +134,16 @@ public class ProductViewController {
             redirectAttributes.addFlashAttribute("errorMessage", "Product with ID " + id + " not found");
         }
         return "redirect:/products";
+    }
+
+    private List<CategoryInfoDTO> getAllCategories() {
+        ResponseEntity<CategoryInfoDTO[]> response = restTemplate.getForEntity("http://localhost:9090/categories", CategoryInfoDTO[].class);
+        CategoryInfoDTO[] body = response.getBody();
+        if (body != null) {
+            return Arrays.asList(body);
+        } else {
+            return Collections.emptyList();
+        }
     }
 
 }

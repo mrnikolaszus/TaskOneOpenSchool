@@ -40,7 +40,7 @@ public class CategoryController {
     public CategoryInfoDTO getCategoryById(@PathVariable Long id) {
         CategoryInfoDTO categoryInfoDTO = categoryService.getCategoryById(id);
         if (categoryInfoDTO == null)
-            throw new CategoryNotFoundException("Category with ID " + id + " not found");
+            throw new CategoryNotFoundException("Category with ID " + id + " not found in Controller");
         return categoryInfoDTO;
     }
 

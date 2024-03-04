@@ -42,6 +42,13 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    public CategoryInfoDTO getCategoryByName(String name) {
+        Category category = categoryRepository.findByName(name)
+                .orElseThrow(() -> new CategoryNotFoundException("Category with name " + name + " not found"));
+        return categoryMapper.toDTO(category);
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public List<CategoryInfoDTO> getAllCategories() {
         List<Category> categories = categoryRepository.findAll();

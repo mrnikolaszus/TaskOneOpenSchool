@@ -1,6 +1,9 @@
-package org.openschool.config.entity;
+package org.openschool.dto;
 
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
+import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Data;
 
@@ -8,7 +11,7 @@ import java.util.List;
 
 @Data
 @Builder
-public class ProductInfoDTO {
+public class ProductInfoReviewsDTO {
     private Long id;
 
     @NotBlank(message = "Product name is required")
@@ -24,5 +27,5 @@ public class ProductInfoDTO {
 
     private String category;
     private Integer avgRating;
-
+    private List<ReviewDTO> reviews;
 }

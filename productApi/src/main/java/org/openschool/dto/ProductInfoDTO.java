@@ -4,6 +4,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
+/*
+    THIS CLASS NOT FOR USE ANYMORE -> USE CLASS ProductInfoReviewsDTO
+ */
+
 @Data
 @Builder
 public class ProductInfoDTO {

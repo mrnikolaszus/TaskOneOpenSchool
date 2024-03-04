@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.openschool.dto.ProductInfoDTO;
+import org.openschool.dto.ProductInfoReviewsDTO;
 import org.openschool.entity.Product;
 import org.openschool.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,28 +32,19 @@ public class ProductControllerIntegrationTest extends IntegrationTestBase {
     @Autowired
     private ObjectMapper objectMapper;
 
-    private ProductInfoDTO createTestProductDTO() {
-        return ProductInfoDTO.builder()
+    private ProductInfoReviewsDTO createTestProductDTO() {
+        return ProductInfoReviewsDTO.builder()
                 .name("Integration Test Product")
                 .description("Test Description")
                 .price(100.0)
-                .categoryId(1)
-                .build();
-    }
-
-    private Product createTestProduct() {
-        return Product.builder()
-                .name("Integration Test Product")
-                .description("Test Description")
-                .price(100.0)
-                .categoryId(1)
+                .category("electric")
                 .build();
     }
 
 
     @Test
     public void testCreateProduct() throws Exception {
-        ProductInfoDTO product = createTestProductDTO();
+        ProductInfoReviewsDTO product = createTestProductDTO();
         mockMvc.perform(post("/products")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(product)))
@@ -76,7 +68,7 @@ public class ProductControllerIntegrationTest extends IntegrationTestBase {
 
     @Test
     public void testUpdateProduct() throws Exception {
-        ProductInfoDTO product = createTestProductDTO();
+        ProductInfoReviewsDTO product = createTestProductDTO();
         product.setId(TEST_ID_2);
         mockMvc.perform(put("/products/{id}", TEST_ID_2)
                         .contentType(MediaType.APPLICATION_JSON)
