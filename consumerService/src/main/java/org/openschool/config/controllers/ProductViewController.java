@@ -36,7 +36,7 @@ public class ProductViewController {
     }
 
     @PostMapping("/{id}")
-    public String updateProduct(@PathVariable Long id, @ModelAttribute ProductInfoDTO productInfoDTO,
+    public String updateProduct(@PathVariable Long id, @ModelAttribute  @Validated ProductInfoDTO productInfoDTO,
                                 BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors());
@@ -79,6 +79,16 @@ public class ProductViewController {
             return "redirect:/products/create";
         }
 
+        return "redirect:/products";
+    }
+
+    @GetMapping("/delete/{id}") // Thymeleaf не поддерживает, так как REST
+    public String deleteProduct(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        try {
+            restTemplate.delete(baseUrl + "/" + id);
+        } catch (HttpClientErrorException.NotFound e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Product with ID " + id + " not found");
+        }
         return "redirect:/products";
     }
 

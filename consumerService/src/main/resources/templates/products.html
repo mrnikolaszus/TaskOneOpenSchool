@@ -29,7 +29,11 @@
         <td th:text="${product.description}">Description</td>
         <td th:text="${product.price}">Price</td>
         <td th:text="${product.categoryId}">Category ID</td>
-        <td><a th:href="@{'/products/' + ${product.id}}">Edit</a></td>
+        <td>
+            <a th:href="@{'/products/' + ${product.id}}">Edit</a>
+            <a th:href="@{'/products/delete/' + ${product.id}}">Delete</a>
+        </td>
+
     </tr>
     </tbody>
 </table>
