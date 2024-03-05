@@ -34,11 +34,17 @@ public class ProductViewController {
     public String getAllProducts(Model model,
                                  @RequestParam(defaultValue = "0") int page,
                                  @RequestParam(defaultValue = "10") int size,
-                                 @RequestParam(value = "category", required = false) String category) {
+                                 @RequestParam(value = "category", required = false) String category,
+                                 @RequestParam(value = "search", required = false) String search) { // Добавлен параметр search
 
         String url = baseUrl + "?page=" + page + "&size=" + size;
+
         if (category != null && !category.isEmpty()) {
             url += "&category=" + category;
+        }
+
+        if (search != null && !search.isEmpty()) {
+            url += "&search=" + search;
         }
         ResponseEntity<PaginatedResponse<ProductInfoDTO>> response = restTemplate.exchange(
                 url,
@@ -49,6 +55,7 @@ public class ProductViewController {
 
         if (body != null) {
             model.addAttribute("category", category);
+            model.addAttribute("search", search);
             model.addAttribute("products", body.getContent());
             model.addAttribute("currentPage", page);
             model.addAttribute("totalPages", body.getTotalPages());

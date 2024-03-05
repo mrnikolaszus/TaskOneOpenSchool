@@ -69,4 +69,11 @@ public class ReviewServiceImpl implements ReviewService {
         }
         reviewRepository.deleteById(id);
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<ReviewDTO> getReviewsByProductId(Long productId) {
+        List<Review> reviews = reviewRepository.findByProductId(productId);
+        return reviews.stream().map(reviewMapper::toDTO).collect(Collectors.toList());
+    }
 }

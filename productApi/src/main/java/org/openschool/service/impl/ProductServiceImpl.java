@@ -34,12 +34,18 @@ public class ProductServiceImpl implements ProductService {
         this.productMapper = productMapper;
     }
 
-//    @Override
-//    @Transactional(readOnly = true)
-//    public List<ProductInfoReviewsDTO> getAllProducts() {
-//        List<Product> products = productRepository.findAll();
-//        return products.stream().map(productMapper::toDTO).collect(Collectors.toList());
-//    }
+    @Override
+    @Transactional(readOnly = true)
+    public Page<ProductInfoReviewsDTO> searchProducts(int page, int size, String category, String search) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Product> productPage;
+        if (category != null && !category.isEmpty()) {
+            productPage = productRepository.findByCategoryAndSearch(category, search, pageable);
+        } else {
+            productPage = productRepository.findByCategoryAndSearch(null, search, pageable);
+        }
+        return productPage.map(productMapper::toDTO);
+    }
 
     @Override
     @Transactional(readOnly = true)

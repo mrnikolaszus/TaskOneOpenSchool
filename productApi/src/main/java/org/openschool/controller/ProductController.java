@@ -13,7 +13,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+
 
 @RestController
 @RequestMapping("/products")
@@ -26,6 +26,25 @@ public class ProductController {
         this.productService = productService;
     }
 
+    @GetMapping
+    public ResponseEntity<Page<ProductInfoReviewsDTO>> getAllProducts(
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size,
+            @RequestParam(value = "category", required = false) String category,
+            @RequestParam(value = "search", required = false) String search) {
+        Page<ProductInfoReviewsDTO> productPage;
+
+        if (search != null && !search.isEmpty()) {
+            productPage = productService.searchProducts(page, size, category, search);
+        } else if (category != null && !category.isEmpty()) {
+            productPage = productService.getAllProductsByCategory(page, size, category);
+        } else {
+            productPage = productService.getAllProducts(page, size);
+        }
+        return new ResponseEntity<>(productPage, HttpStatus.OK);
+    }
+
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ProductInfoReviewsDTO createProduct(@RequestBody @Validated ProductInfoReviewsDTO productInfoReviewsDTO, BindingResult bindingResult) {
@@ -34,26 +53,7 @@ public class ProductController {
         return productService.createProduct(productInfoReviewsDTO);
     }
 
-//    @GetMapping
-//    public List<ProductInfoReviewsDTO> getAllProducts() {
-//        return productService.getAllProducts();
-//    }
 
-    @GetMapping
-    public ResponseEntity<Page<ProductInfoReviewsDTO>> getAllProducts(
-            @RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam(value = "size", defaultValue = "10") int size,
-            @RequestParam(value = "category", required = false) String category) {
-        Page<ProductInfoReviewsDTO> productPage;
-
-        if (category != null && !category.isEmpty()) {
-            productPage = productService.getAllProductsByCategory(page, size, category);
-        } else {
-            productPage = productService.getAllProducts(page, size);
-        }
-
-        return new ResponseEntity<>(productPage, HttpStatus.OK);
-    }
 
     @GetMapping("/{id}")
     public ProductInfoReviewsDTO getProductById(@PathVariable Long id) {

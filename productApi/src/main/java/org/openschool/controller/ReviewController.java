@@ -11,7 +11,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
 @RestController
 @RequestMapping("/reviews")
 public class ReviewController {
@@ -23,20 +22,20 @@ public class ReviewController {
         this.reviewService = reviewService;
     }
 
-    @PostMapping
+    @PostMapping("/product/{productId}")
     @ResponseStatus(HttpStatus.CREATED)
-    public ReviewDTO createReview(@RequestBody @Validated ReviewDTO reviewDTO, BindingResult bindingResult) {
+    public ReviewDTO createReview(@PathVariable Long productId, @RequestBody @Validated ReviewDTO reviewDTO, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             throw new ValidationApiException("Invalid data: " + bindingResult.getAllErrors());
         }
+        reviewDTO.setProductId(productId);
         return reviewService.createReview(reviewDTO);
     }
 
-    @GetMapping
-    public List<ReviewDTO> getAllReviews() {
-        return reviewService.getAllReviews();
+    @GetMapping("/product/{productId}")
+    public List<ReviewDTO> getProductReviews(@PathVariable Long productId) {
+        return reviewService.getReviewsByProductId(productId);
     }
-
     @GetMapping("/{id}")
     public ReviewDTO getReviewById(@PathVariable Long id) {
         ReviewDTO reviewDTO = reviewService.getReviewById(id);
@@ -52,16 +51,13 @@ public class ReviewController {
         if (bindingResult.hasErrors()) {
             throw new ValidationApiException("Invalid data: " + bindingResult.getAllErrors());
         }
-
         ReviewDTO existingReviewDTO = reviewService.getReviewById(id);
         if (existingReviewDTO == null) {
             throw new ReviewNotFoundException("Review with ID " + id + " not found");
         }
-
         if (!reviewDTO.getId().equals(id)) {
             throw new ValidationApiException("ID in the path does not match ID in the body");
         }
-
         return reviewService.updateReview(id, reviewDTO);
     }
 

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Reviews for Product</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<h1>Reviews for Product</h1>
+
+<table>
+  <thead>
+  <tr>
+    <th>Id</th>
+    <th>Text</th>
+    <th>Rate</th>
+    <th>Action</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="review : ${reviews}">
+    <td th:text="${review.id}"></td>
+    <td th:text="${review.text}"></td>
+    <td th:text="${review.rate}"></td>
+    <td>
+      <a th:href="@{'/products/' + ${productId} + '/reviews/delete/' + ${review.id}}">Delete</a>
+    </td>
+  </tr>
+  </tbody>
+</table>
+
+<h2>Add New Review</h2>
+<form th:action="@{'/products/' + ${productId} + '/reviews/add'}" method="get">
+  <div>
+    <label for="text">Review Text:</label>
+    <input type="text" id="text" name="text" required>
+  </div>
+  <div>
+    <label for="rate">Rate:</label>
+    <input type="number" id="rate" name="rate" min="1" max="5" required>
+  </div>
+  <div>
+    <button type="submit">Add Review</button>
+  </div>
+</form>
+<a href="/products">Back to Products</a>
+</body>
+</html>

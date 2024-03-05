@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS product (
 CREATE TABLE IF NOT EXISTS review (
                         id BIGSERIAL PRIMARY KEY,
                         text VARCHAR(255),
-                        rate INTEGER,
+                        rate INTEGER CHECK (rate >= 0 AND rate <= 5),
                         product_id BIGINT,
                         time_created TIMESTAMP,
                         time_updated TIMESTAMP,

@@ -15,4 +15,5 @@ public interface ProductService {
 
     Page<ProductInfoReviewsDTO> getAllProductsByCategory(int page, int size, String category);
 
+    Page<ProductInfoReviewsDTO> searchProducts(int page, int size, String category, String search);
 }

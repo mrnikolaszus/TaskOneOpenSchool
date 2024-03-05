@@ -12,8 +12,6 @@
     <name>testmservices</name>
     <url>https://www.openschool.com</url>
     <modules>
-<!--        <module>customer</module>-->
-<!--        <module>someApi</module>-->
         <module>productApi</module>
         <module>consumerService</module>
     </modules>
