@@ -13,7 +13,7 @@ import org.springframework.web.client.RestTemplate;
 @RequestMapping("/categories")
 public class CategoryViewController {
     private final RestTemplate restTemplate;
-    private final String baseUrl = "http://localhost:9090/categories";
+    private final String baseUrl = "http://productapi:9090/categories";
 
     public CategoryViewController(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;

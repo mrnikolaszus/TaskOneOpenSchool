@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/products")
 public class ProductViewController {
     private final RestTemplate restTemplate;
-    private final String baseUrl = "http://localhost:9090/products";
+    private final String baseUrl = "http://productapi:9090/products";
 
     public ProductViewController(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
@@ -144,7 +144,7 @@ public class ProductViewController {
     }
 
     private List<CategoryInfoDTO> getAllCategories() {
-        ResponseEntity<CategoryInfoDTO[]> response = restTemplate.getForEntity("http://localhost:9090/categories", CategoryInfoDTO[].class);
+        ResponseEntity<CategoryInfoDTO[]> response = restTemplate.getForEntity("http://productapi:9090/categories", CategoryInfoDTO[].class);
         CategoryInfoDTO[] body = response.getBody();
         if (body != null) {
             return Arrays.asList(body);

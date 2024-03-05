@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   postgres:
     container_name: postgres
@@ -9,9 +11,9 @@ services:
     volumes:
       - postgres:/data/postgres
     ports:
-      - "5433:5432"
+      - "5432:5432"
     networks:
-      - postgres
+      - backend
     restart: unless-stopped
 
   pgadmin:
@@ -26,17 +28,37 @@ services:
     ports:
       - "5050:80"
     networks:
+      - backend
+    restart: unless-stopped
+
+  productapi:
+    build:
+      context: ./productApi
+      dockerfile: Dockerfile
+    ports:
+      - "9090:9090"
+    networks:
+      - backend
+    depends_on:
       - postgres
     restart: unless-stopped
 
+  consumerservice:
+    build:
+      context: ./consumerService
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    networks:
+      - backend
+    depends_on:
+      - postgres
+    restart: unless-stopped
 
 networks:
-  postgres:
-    driver: bridge
-  spring:
+  backend:
     driver: bridge
 
 volumes:
   postgres:
   pgadmin:
-

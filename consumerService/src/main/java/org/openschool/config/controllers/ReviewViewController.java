@@ -18,7 +18,7 @@ import java.util.List;
 public class ReviewViewController {
 
     private final RestTemplate restTemplate;
-    private final String reviewBaseUrl = "http://localhost:9090/reviews";
+    private final String reviewBaseUrl = "http://productapi:9090/reviews";
 
     public ReviewViewController(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
