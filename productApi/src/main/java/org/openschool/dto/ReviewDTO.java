@@ -13,7 +13,6 @@ import lombok.Data;
 public class ReviewDTO {
     private Long id;
 
-
     private String text;
 
     @Min(value = 0, message = "Rate must be between 0 and 5")
