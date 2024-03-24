@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Metrics</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<h1>Metrics</h1>
+
+<div>
+  <form th:action="@{/metrics/search}" method="get">
+    <input type="text" name="id" placeholder="Search by ID"/>
+    <button type="submit">Search</button>
+  </form>
+</div>
+
+<table>
+  <thead>
+  <tr>
+    <th>ID</th>
+    <th>Name</th>
+    <th>Value</th>
+    <th>Created At</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="metric : ${metricsPage.content}">
+    <td th:text="${metric.id}"></td>
+    <td th:text="${metric.name}"></td>
+    <td th:text="${metric.value}"></td>
+    <td th:text="${metric.createdAt}"></td>
+  </tr>
+  </tbody>
+</table>
+<p>Page:</p>
+<div>
+  <a th:href="@{/metrics(page=${metricsPage.number - 1}, size=${metricsPage.size})}" th:if="${metricsPage.hasPrevious()}">Previous</a>
+  <span th:text="${metricsPage.number + 1}"></span>
+  <a th:href="@{/metrics(page=${metricsPage.number + 1}, size=${metricsPage.size})}" th:if="${metricsPage.hasNext()}">Next</a>
+</div>
+
+</body>
+</html>

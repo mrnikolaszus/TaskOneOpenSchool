@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Metric Details</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<h1>Metric Details</h1>
+
+<div th:if="${metric != null}">
+    <p>ID: <span th:text="${metric.id}"></span></p>
+    <p>Name: <span th:text="${metric.name}"></span></p>
+    <p>Value: <span th:text="${metric.value}"></span></p>
+    <p>Created At: <span th:text="${metric.createdAt}"></span></p>
+</div>
+<div th:if="${metric == null}">
+    <p>Metric not found.</p>
+</div>
+
+<a href="/metrics">Back to Metrics List</a>
+
+</body>
+</html>
