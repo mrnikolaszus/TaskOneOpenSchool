@@ -5,6 +5,7 @@ spring:
   application:
     name: consumerService
 
+
 eureka:
   client:
     service-url:

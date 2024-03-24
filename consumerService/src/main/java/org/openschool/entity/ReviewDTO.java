@@ -1,5 +1,4 @@
-package org.openschool.config.entity;
-
+package org.openschool.entity;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;

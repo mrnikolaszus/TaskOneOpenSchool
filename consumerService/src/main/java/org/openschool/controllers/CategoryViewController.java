@@ -1,6 +1,6 @@
-package org.openschool.config.controllers;
+package org.openschool.controllers;
 
-import org.openschool.config.entity.CategoryInfoDTO;
+import org.openschool.entity.CategoryInfoDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

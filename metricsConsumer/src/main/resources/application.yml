@@ -1,9 +1,9 @@
 server:
-  port: 9090
+  port: 8989
 
 spring:
   application:
-    name: productApi
+    name: metricsConsumer
   datasource:
     username: nickz
     password: password
@@ -17,25 +17,27 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
 
-  liquibase:
-    change-log: classpath:/db.changelog/db.changelog-master.yaml
-
   kafka:
     bootstrap-servers: kafka:9092
+    consumer:
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    producer:
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
     properties:
+      spring.json.trusted.packages: '*'
+      spring.json.value.default.type: org.openschool.entity.Metrics
       sasl:
         jaas:
           config: org.apache.kafka.common.security.plain.PlainLoginModule required username="testUsername" password="testPassword";
         mechanism: PLAIN
       security:
         protocol: SASL_PLAINTEXT
+
+
 eureka:
   client:
     service-url:
       defaultZone: http://eureka-server:8761/eureka
 
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health,info,metrics

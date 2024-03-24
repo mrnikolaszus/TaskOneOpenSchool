@@ -5,6 +5,8 @@
     <file url="file://$PROJECT_DIR$/consumerService/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/eureka-server/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/eureka-server/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/metricsConsumer/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/metricsConsumer/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/productApi/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/productApi/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />

@@ -1,4 +1,4 @@
-package org.openschool.config.entity;
+package org.openschool.entity;
 
 import jakarta.validation.constraints.*;
 import lombok.Builder;

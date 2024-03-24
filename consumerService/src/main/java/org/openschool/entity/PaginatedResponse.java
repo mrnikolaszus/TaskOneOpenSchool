@@ -1,4 +1,4 @@
-package org.openschool.config.entity;
+package org.openschool.entity;
 
 import lombok.Getter;
 import lombok.Setter;

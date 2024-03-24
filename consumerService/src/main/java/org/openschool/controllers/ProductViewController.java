@@ -1,8 +1,11 @@
-package org.openschool.config.controllers;
+package org.openschool.controllers;
 
-import org.openschool.config.entity.CategoryInfoDTO;
-import org.openschool.config.entity.PaginatedResponse;
-import org.openschool.config.entity.ProductInfoDTO;
+
+import org.openschool.entity.CategoryInfoDTO;
+
+import org.openschool.entity.PaginatedResponse;
+import org.openschool.entity.ProductInfoDTO;
+
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;

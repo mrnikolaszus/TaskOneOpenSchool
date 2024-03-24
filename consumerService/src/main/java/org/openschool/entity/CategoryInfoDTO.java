@@ -1,4 +1,4 @@
-package org.openschool.config.entity;
+package org.openschool.entity;
 
 import lombok.Builder;
 import lombok.Data;

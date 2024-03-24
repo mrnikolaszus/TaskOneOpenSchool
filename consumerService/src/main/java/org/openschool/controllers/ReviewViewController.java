@@ -1,6 +1,6 @@
-package org.openschool.config.controllers;
+package org.openschool.controllers;
 
-import org.openschool.config.entity.ReviewDTO;
+import org.openschool.entity.ReviewDTO;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;

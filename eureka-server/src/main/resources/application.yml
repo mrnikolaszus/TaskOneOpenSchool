@@ -10,12 +10,4 @@ spring:
   application:
     name: eureka-server
 
-logging:
-  level:
-    com:
-      netflix:
-        eureka: DEBUG
-        discovery: DEBUG
 
-#  zipkin:
-#    base-url: http://localhost:9411
